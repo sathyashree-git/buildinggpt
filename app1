@@ -1,0 +1,51 @@
+import ollama
+import csv
+
+print("Building an E-commerce Chatbot")
+
+# Read product information
+with open("products.csv", "r", encoding="utf-8") as file:
+    products = file.read()
+
+print("\nAVAILABLE PRODUCTS:\n")
+print(products)
+
+# Get customer question
+user_text = input("\nEnter your question: ")
+
+# Create prompt
+prompt = f"""
+You are an E-commerce chatbot.
+
+Answer customer questions using ONLY the following product information.
+
+PRODUCT INFORMATION:
+{products}
+
+Customer Question: {user_text}
+
+If the requested product or information is not available,
+reply: "Sorry, the requested information is not available
+in our product database."
+
+Give a simple and helpful answer.
+"""
+
+# Connect to Ollama
+response = ollama.chat(
+    model="qwen2.5:7b",
+    messages=[
+        {"role": "user", "content": prompt}
+    ]
+)
+
+result = response["message"]["content"]
+
+print("\nCHATBOT RESPONSE:\n")
+print(result)
+
+# Save response
+with open("crt.csv", "w", encoding="utf-8") as file:
+    file.write(result)
+
+print("\nSaved successfully in crt.csv")
