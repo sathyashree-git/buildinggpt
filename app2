@@ -1,0 +1,52 @@
+import ollama
+
+print("RESUME ANALYZER")
+
+# Read resume
+with open("resume.txt", "r", encoding="utf-8") as file:
+    resume = file.read()
+
+print("\nRESUME CONTENT:\n")
+print(resume)
+
+# Get user question
+question = input("\nEnter your question about the resume: ")
+
+# Create prompt
+prompt = f"""
+You are an AI Resume Analyzer.
+
+Analyze the resume and answer the user's question
+using ONLY the information provided in the resume.
+
+RESUME CONTENT:
+{resume}
+
+USER QUESTION:
+{question}
+
+If the information is not available,
+reply: "This information is not available in the resume."
+
+Give a professional and clear answer.
+"""
+
+# Connect to Ollama
+response = ollama.chat(
+    model="qwen2.5:0.5b",
+    messages=[
+        {"role": "user", "content": prompt}
+    ]
+)
+
+# Get result
+result = response["message"]["content"]
+
+print("\nRESUME ANALYSIS RESULT:\n")
+print(result)
+
+# Save result
+with open("resume_result.txt", "w", encoding="utf-8") as file:
+    file.write(result)
+
+print("\nSaved successfully in resume_result.txt")
