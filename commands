@@ -1,0 +1,4 @@
+python -m pip install --upgrade pip
+Python -m pip install requests ollama
+Ollama list
+Python app.py
